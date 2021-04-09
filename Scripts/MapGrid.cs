@@ -69,13 +69,13 @@ public class MapGrid{
 
     public Cell findCellByXYZ(float x, float y, float z){
         
-        // x = x - startPosition[0];
-        // y = y - startPosition[1];
-        // z = z - startPosition[2];
+        x = x - startPosition[0];
+        y = y - startPosition[1];
+        z = z - startPosition[2];
 
-        // int xpos = (int) (x / boxSize);
-        // int ypos = (int) (y / boxSize);
-        // int zpos = (int) (z / boxSize);
+        int xpos = (int) (x / boxSize);
+        int ypos = (int) (y / boxSize);
+        int zpos = (int) (z / boxSize);
 
         // Debug.Log(xpos);
         // Debug.Log(ypos);
@@ -84,11 +84,11 @@ public class MapGrid{
         // Debug.Log(cellGrid.GetLength(1));
         // Debug.Log(cellGrid.GetLength(2));
         // Debug.Log(cellGrid[xpos,ypos,zpos]);
-        Debug.Log(cellGrid[(int)1,(int)1,(int)1]);
+        // Debug.Log(cellGrid[(int)1,(int)1,(int)1]);
         // Debug.Log(cellGrid[xpos,ypos,zpos]);
 
-        // return cellGrid[xpos,ypos,zpos];
-                return cellGrid[1,1,1];
+        return cellGrid[xpos,ypos,zpos];
+                // return cellGrid[1,1,1];
 
     }
 
