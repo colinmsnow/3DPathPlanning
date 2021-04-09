@@ -21,7 +21,7 @@ public class MapGrid{
 
     int[] size;
     float boxSize;
-    Cell[,,] cellGrid;
+    public Cell[,,] cellGrid;
 
     public MapGrid(){
     }
@@ -56,8 +56,8 @@ public class MapGrid{
     public Cell[,,] createCellGrid(){
         Cell[,,] _cellGrid = new Cell[(int)size[0], (int)size[1], (int)size[2]];
         for(int i=0; i<size[0]; i++){
-            for(int j=0; i<size[1]; i++){
-                for(int k=0; i<size[2]; i++){
+            for(int j=0; j<size[1]; j++){
+                for(int k=0; k<size[2]; k++){
                     _cellGrid[i, j, k] = new Cell(collisionMask[i,j,k], i, j, k);
 
                     // Debug.Log(cellGrid[i, j, k]);

@@ -121,7 +121,14 @@ public class ObjectDetectionGrid : MonoBehaviour
         // grid.findCellByXYZ(0, 0, 0);
         grid.checkCell();
 
+        Debug.Log("Graph");
+
         Debug.Log(graph[1,1,1]);
+        Debug.Log(grid.cellGrid[2,0,0]);
+
+        // for(int i=0; i<50; i++){
+        //     for(int j=0; i<; i++){
+        //         for(int k=0; i<size[2]; i++){
 
         // Debug.Log(grid.cellGrid[0, 0, 0].empty);
 
