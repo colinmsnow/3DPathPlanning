@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+// using MapGrid;
 
 
 // 500^3 boxes takes 68961 ms = 1.1 min
@@ -50,7 +51,12 @@ public class ObjectDetectionGrid : MonoBehaviour
         int percent = numSamples/100;
         Debug.Log(percent);
         int startTime = Environment.TickCount;
-        bool[,,] collisionMask = new bool[(int)numBoxes, (int)numBoxes, (int)numBoxes];
+        // bool[,,] collisionMask = new bool[(int)numBoxes, (int)numBoxes, (int)numBoxes];
+
+        MapGrid grid = new MapGrid();
+        float[] startpos = new float[] {startPosition[0],startPosition[1],startPosition[2]};
+        int[] initsize = new int[] {(int)numBoxes,(int)numBoxes,(int)numBoxes,};
+        grid.initialize(startpos, initsize, boxSize);
         for (int x=0; x<numBoxes; x++){
             for (int y=0; y<numBoxes; y++){
                 for (int z=0; z<numBoxes; z++){
@@ -70,11 +76,12 @@ public class ObjectDetectionGrid : MonoBehaviour
                         cube.transform.position = new Vector3(x*boxSize + startPosition[0], y*boxSize+ startPosition[1], z*boxSize+ startPosition[2]);
                         cube.GetComponent<Renderer>().material.color = Color.red;
 
-                        collisionMask[x, y, z] = true;
+                        // collisionMask[x, y, z] = true;
+                        grid.setMaskItem(x, y, z, false);
                         // Debug.Log(collisionMask[x, y, z]);
                     }
                     else{
-                        collisionMask[x, y, z] = false;
+                        grid.setMaskItem(x, y, z, true);
                     }
 
                     sample++;
@@ -97,6 +104,26 @@ public class ObjectDetectionGrid : MonoBehaviour
         int endTime = Environment.TickCount;
 
         Debug.Log(endTime-startTime);
+
+
+        GameStorage storage = gameObject.AddComponent( typeof(GameStorage)) as GameStorage;
+
+        storage.Save(grid);
+        Debug.Log(Application.persistentDataPath);
+
+
+
+        Cell[,,] graph = grid.createCellGrid();
+
+        // Debug.Log(graph[1,1,1]);
+
+
+        // grid.findCellByXYZ(0, 0, 0);
+        grid.checkCell();
+
+        Debug.Log(graph[1,1,1]);
+
+        // Debug.Log(grid.cellGrid[0, 0, 0].empty);
 
         // for (int x=0; x<numBoxes; x++){
         //     for (int y=0; y<numBoxes; y++){
