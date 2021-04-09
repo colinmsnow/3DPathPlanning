@@ -154,6 +154,10 @@ public class Cell {
 
     }
 
+    public void printCell(){
+        Debug.Log(string.Format("Cell position: {0}, {1}, {2}, empty: {3}, parent: {4}, cost: {5}, heuristic: {6}", position[0], position[1], position[2], empty, parent, cost, heuristic));
+    }
+
     
 
 }

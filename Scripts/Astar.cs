@@ -104,7 +104,7 @@ public class Astar
                 // var g = bestCell.cost + (curCell.position - bestCell.position).magnitude;
                 var g = bestCell.cost + grid.euclideanDistanceCell(curCell, bestCell);
 
-                var h = grid.euclideanDistanceCell(curCell, targetCell);;
+                var h = grid.euclideanDistanceCell(curCell, targetCell);
 
                 if (openList.Contains(curCell) && curCell.f < (g + h))
                     continue;
@@ -114,6 +114,9 @@ public class Astar
                 curCell.cost = g;
                 curCell.heuristic = h;
                 curCell.parent = bestCell;
+
+                if (!closedList.Contains(bestCell))
+                closedList.Add(bestCell);
 
                 if (!openList.Contains(curCell))
                     openList.Add(curCell);
@@ -150,10 +153,11 @@ public class Astar
 
         var current = destination;
         while (current.parent != null)
+        // for (int i=0; i<4; i++)
         {
             current = current.parent;
             path.Add(current);
-            Debug.Log(current);
+            current.printCell();
         }
 
         path.Reverse();
