@@ -30,7 +30,25 @@ public class PathPlanner : MonoBehaviour{
             float[] floattarget = new float[] {target[0], target[1], target[2]};
 
             var answer = astar.search(floatorigin, floattarget);
-            Debug.Log(answer);
+            // Debug.Log(answer);
+
+            List<Vector3> vectorPath;
+
+            if (answer == null){
+                Debug.Log("ASTAR: No valid path");
+                vectorPath = null;
+            }
+            else{
+                vectorPath = astar.PathToVectors();
+            }
+
+            foreach(Vector3 vec in vectorPath){
+                Debug.Log(vec.ToString());
+            }
+
+
+
+
             // Debug.Log(string.Format("ANSWER: {0},{1},{2}", answer.position[0], answer.position[1], answer.position[2]));
         }
 

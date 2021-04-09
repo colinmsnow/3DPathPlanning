@@ -27,6 +27,8 @@ public class Astar
     HashSet<Cell> openList = new HashSet<Cell>();
     HashSet<Cell> closedList = new HashSet<Cell>();
 
+    private List<Cell> generatedPath;
+
 
     private Astar () { }
 
@@ -39,7 +41,7 @@ public class Astar
         // HashSet<Cell> closedList = new HashSet<Cell>();
     }
 
-    public Cell[] search(float[] _origin, float[] _target){
+    public List<Cell> search(float[] _origin, float[] _target){
 
         // Hash set can do Add, Contains, Clear, GetEnumerator, Remove, ToString, etc...
 
@@ -101,6 +103,10 @@ public class Astar
                     return CreatePath(curCell);
                 }
 
+                if (!curCell.empty){
+                    continue;
+                }
+
                 // var g = bestCell.cost + (curCell.position - bestCell.position).magnitude;
                 var g = bestCell.cost + grid.euclideanDistanceCell(curCell, bestCell);
 
@@ -147,7 +153,7 @@ public class Astar
         return result;
     }
 
-    private Cell[] CreatePath(Cell destination){
+    private List<Cell> CreatePath(Cell destination){
 
         var path = new List<Cell>() { destination };
 
@@ -161,7 +167,22 @@ public class Astar
         }
 
         path.Reverse();
-        return path.ToArray();
+        generatedPath = path;
+
+        return generatedPath;
+    }
+
+    public List<Vector3> PathToVectors(){
+
+        List<Vector3> vectorPath = new List<Vector3>();
+
+        foreach(Cell cell in generatedPath){
+            vectorPath.Add(new Vector3(cell.position[0], cell.position[1], cell.position[2]));
+        }
+
+
+
+        return vectorPath;
     }
 
     

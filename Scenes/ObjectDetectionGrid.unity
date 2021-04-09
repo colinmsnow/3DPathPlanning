@@ -630,8 +630,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ea53f8b8667d4eecbc20c876a0ee853, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {x: 0, y: 0, z: 0}
-  target: {x: 5, y: 5, z: 5}
+  origin: {x: -10, y: -10, z: -10}
+  target: {x: 10, y: 10, z: 10}
 --- !u!1 &1085101590
 GameObject:
   m_ObjectHideFlags: 0
