@@ -175,9 +175,14 @@ public class Astar
     public List<Vector3> PathToVectors(){
 
         List<Vector3> vectorPath = new List<Vector3>();
+        Vector3 startpos = new Vector3(grid.startPosition[0], grid.startPosition[1], grid.startPosition[2]);
 
         foreach(Cell cell in generatedPath){
-            vectorPath.Add(new Vector3(cell.position[0], cell.position[1], cell.position[2]));
+            Vector3 boxpos = new Vector3(cell.position[0], cell.position[1], cell.position[2]);
+            boxpos *=grid.boxSize;
+            boxpos = boxpos + startpos;
+            // boxpos *=grid.boxSize;
+            vectorPath.Add(boxpos);
         }
 
 

@@ -44,6 +44,10 @@ public class PathPlanner : MonoBehaviour{
 
             foreach(Vector3 vec in vectorPath){
                 Debug.Log(vec.ToString());
+                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                cube.transform.localScale = new Vector3(mapgrid.boxSize, mapgrid.boxSize, mapgrid.boxSize);
+                cube.transform.position = vec;
+                cube.GetComponent<Renderer>().material.color = Color.green;
             }
 
 

@@ -17,10 +17,10 @@ public class MapGrid{
 
     bool[,,] collisionMask;
 
-    float[] startPosition;
+    public float[] startPosition;
 
     int[] size;
-    float boxSize;
+    public float boxSize;
     public Cell[,,] cellGrid;
 
     public MapGrid(){
