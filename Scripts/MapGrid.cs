@@ -48,6 +48,13 @@ public class MapGrid{
         return Mathf.Sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) + (z1-z2)*(z1-z2)) * boxSize;
     }
 
+    /* Gets euclidean distance between two cells */
+    public float euclideanDistanceCell(Cell one, Cell two){
+        int[] a = one.position;
+        int[] b = two.position;
+        return Mathf.Sqrt((a[0]-b[0])*(a[0]-b[0]) + (a[1]-b[1])*(a[1]-b[1]) + (a[2]-b[2])*(a[2]-b[2])) * boxSize;
+    }
+
     /* Gets manhattan distance between two boxes */
     public float manhattanDistance(int x1, int y1, int z1, int x2, int y2, int z2){
         return (Mathf.Abs(x1-x2) + Mathf.Abs(y1-y2) + Mathf.Abs(z1-z2) * boxSize);
@@ -97,6 +104,30 @@ public class MapGrid{
         Debug.Log(this.cellGrid[(int)1,(int)1,(int)1]);
     }
 
+    public Cell[] GetNeighbours(Cell cell){
+
+        Cell[] result = new Cell[26];
+
+        int resnum = 0;
+
+        for (int i=-1; i<=1; i++){
+            for (int j=-1; j<=1; j++){
+                for (int k=-1; k<=1; k++){
+                    // Debug.Log(string.Format("{0}, {1}, {2} ", i, j, k));
+                    if (!(i==0 && j==0 && k==0)){
+                        try{
+                            result[resnum] = cellGrid[cell.position[0] + i, cell.position[1] + j, cell.position[2] + k];
+                        }
+                        catch (System.IndexOutOfRangeException ex){
+                            result[resnum] = null;
+                        }
+                        resnum++;
+                    }
+            }}}
+
+        return result;
+    }
+
 }
 [Serializable]
 public class Cell {
@@ -110,7 +141,7 @@ public class Cell {
         get { return cost + heuristic; }
     }
 
-    public Cell parent;
+    public Cell parent = null;
 
     private Cell() { }
 

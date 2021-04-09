@@ -147,6 +147,17 @@ public class ObjectDetectionGrid : MonoBehaviour
         // Debug.Log(collisionMask[0, 0, 0]);
         // GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
         // cube.transform.position = new Vector3(0, 0.5f, 0);
+
+
+        // Astar astar = new Astar()
+
+
+
+
+
+
+
+
         
     }
 
