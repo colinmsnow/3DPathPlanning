@@ -3,6 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+/*
+
+Simple path planning object. Can be used to visualize paths.
+
+Inputs:
+    Origin: Place to start search
+    Target: Target position
+    
+Loads:
+    A graph object from saved file
+
+
+Returns:
+    Nothing but shows path in green boxes
+
+*/
+
 public class PathPlanner : MonoBehaviour{
 
 

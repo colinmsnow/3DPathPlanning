@@ -39,17 +39,9 @@ public class Astar
 
     public Astar (Graph _grid){
         grid = _grid;
-        // target = _target;
-        // origin = _origin;
-
-        // HashSet<Cell> openList = new HashSet<Cell>();
-        // HashSet<Cell> closedList = new HashSet<Cell>();
     }
 
     public List<Cell> search(float[] _origin, float[] _target){
-
-        // Hash set can do Add, Contains, Clear, GetEnumerator, Remove, ToString, etc...
-
 
         target = _target;
         origin = _origin;
@@ -61,45 +53,23 @@ public class Astar
         Cell targetCell = grid.findCellByXYZ(target[0], target[1], target[2]);
 
         int remaining = 0;
-
-        // Debug.Log(originCell.position[0]);
-        // Debug.Log(originCell.position[1]);
-        // Debug.Log(originCell.position[2]);
-
-        // Debug.Log(targetCell.position[0]);
-        // Debug.Log(targetCell.position[1]);
-        // Debug.Log(targetCell.position[2]);
-
         int numiters = 0;
-
-
 
 
         originCell.heuristic = grid.Distance(originCell, targetCell);
         openList.Add(originCell);
         queue.Enqueue(0, originCell);
-        // heap.Add(originCell);
         remaining++;
 
-        while (remaining>0){ // It isnt empty (check if this works)
-
-            // Debug.Log(originCell);
-            // openList.Remove(originCell);
-            // remaining--;
+        while (remaining>0){ // It isnt empty
 
             numiters++;
 
-
-            // Cell bestCell = GetBestCell(); // Dont do this
             Cell bestCell = queue.Dequeue();
             openList.Remove(bestCell);
             remaining--;
 
             var neighbours = grid.GetNeighbours(bestCell);
-
-            // for(int i=0;i<27;i++){
-            //     Debug.Log(neighbours[i].empty);
-            // }
 
 
             GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -127,7 +97,6 @@ public class Astar
                     continue;
                 }
 
-                // var g = bestCell.cost + (curCell.position - bestCell.position).magnitude;
                 var g = bestCell.cost + grid.Distance(curCell, bestCell);
 
                 var h = grid.Distance(curCell, targetCell);
@@ -152,28 +121,9 @@ public class Astar
             }
         
         }
-
         return null;
-
-
     }
 
-    // private Cell GetBestCell ()
-    // {
-    //     Cell result = null;
-    //     float currentF = float.PositiveInfinity;
-
-    //     foreach(Cell cell in openList)
-    //     {
-    //         if (cell.f < currentF)
-    //         {
-    //             currentF = cell.f;
-    //             result = cell;
-    //         }
-    //     }
-
-    //     return result;
-    // }
 
     private List<Cell> CreatePath(Cell destination){
 
@@ -181,11 +131,9 @@ public class Astar
 
         var current = destination;
         while (current.parent != null)
-        // for (int i=0; i<4; i++)
         {
             current = current.parent;
             path.Add(current);
-            // current.printCell();
         }
 
         path.Reverse();
@@ -195,7 +143,6 @@ public class Astar
     }
 
     public List<Vector3> PathToVectors(){
-        // Vector3 startpos = new Vector3(grid.startPosition[0], grid.startPosition[1], grid.startPosition[2]);
         List<Vector3> vectorPath = grid.PathToVectors(generatedPath);
         return vectorPath;
     }
@@ -203,202 +150,4 @@ public class Astar
     public Vector3 CellToVector(Cell cell){
         return grid.CellToVector(cell);
     }
-
-    
-
-
-
-
-
-}
-
-
-
-public class CellCompare : Comparer<Cell>{
-    public override int Compare(Cell a, Cell b){
-
-        if(a.f > b.f) return 1;
-        return -1;
-    }
-}
-
-
-
-public class PriorityQueue<T>
-{
-    class Node
-    {
-        public float Priority { get; set; }
-        public T Object { get; set; }
-    }
-
-    //object array
-    List<Node> queue = new List<Node>();
-    int heapSize = -1;
-    bool _isMinPriorityQueue;
-    public int Count { get { return queue.Count; } }
-
-    /// <summary>
-    /// If min queue or max queue
-    /// </summary>
-    /// <param name="isMinPriorityQueue"></param>
-    public PriorityQueue(bool isMinPriorityQueue = false)
-    {
-        _isMinPriorityQueue = isMinPriorityQueue;
-    }
-
-
-    /// <summary>
-    /// Enqueue the object with priority
-    /// </summary>
-    /// <param name="priority"></param>
-    /// <param name="obj"></param>
-    public void Enqueue(float priority, T obj)
-    {
-        Node node = new Node() { Priority = priority, Object = obj };
-        queue.Add(node);
-        heapSize++;
-        //Maintaining heap
-        if (_isMinPriorityQueue)
-            BuildHeapMin(heapSize);
-        else
-            BuildHeapMax(heapSize);
-    }
-        /// <summary>
-    /// Dequeue the object
-    /// </summary>
-    /// <returns></returns>
-    public T Dequeue()
-    {
-        if (heapSize > -1)
-        {
-            var returnVal = queue[0].Object;
-            queue[0] = queue[heapSize];
-            queue.RemoveAt(heapSize);
-            heapSize--;
-            //Maintaining lowest or highest at root based on min or max queue
-            if (_isMinPriorityQueue)
-                MinHeapify(0);
-            else
-                MaxHeapify(0);
-            return returnVal;
-        }
-        else
-            throw new Exception("Queue is empty");
-    }
-    /// <summary>
-/// Updating the priority of specific object
-/// </summary>
-/// <param name="obj"></param>
-/// <param name="priority"></param>
-public void UpdatePriority(T obj, int priority)
-{
-    int i = 0;
-    for (; i <= heapSize; i++)
-    {
-        Node node = queue[i];
-        if (object.ReferenceEquals(node.Object, obj))
-        {
-            node.Priority = priority;
-            if (_isMinPriorityQueue)
-            {
-                BuildHeapMin(i);
-                MinHeapify(i);
-            }
-            else
-            {
-                BuildHeapMax(i);
-                MaxHeapify(i);
-            }
-        }
-    }
-}
-/// <summary>
-/// Searching an object
-/// </summary>
-/// <param name="obj"></param>
-/// <returns></returns>
-public bool IsInQueue(T obj)
-{
-    foreach (Node node in queue)
-        if (object.ReferenceEquals(node.Object, obj))
-            return true;
-    return false;
-}
-
-    /// <summary>
-    /// Maintain max heap
-    /// </summary>
-    /// <param name="i"></param>
-    private void BuildHeapMax(int i)
-    {
-        while (i >= 0 && queue[(i - 1) / 2].Priority < queue[i].Priority)
-        {
-            Swap(i, (i - 1) / 2);
-            i = (i - 1) / 2;
-        }
-    }
-    /// <summary>
-    /// Maintain min heap
-    /// </summary>
-    /// <param name="i"></param>
-    private void BuildHeapMin(int i)
-    {
-        while (i >= 0 && queue[(i - 1) / 2].Priority > queue[i].Priority)
-        {
-            Swap(i, (i - 1) / 2);
-            i = (i - 1) / 2;
-        }
-    }
-        private void MaxHeapify(int i)
-    {
-        int left = ChildL(i);
-        int right = ChildR(i);
-
-        int heighst = i;
-
-        if (left <= heapSize && queue[heighst].Priority < queue[left].Priority)
-            heighst = left;
-        if (right <= heapSize && queue[heighst].Priority < queue[right].Priority)
-            heighst = right;
-
-        if (heighst != i)
-        {
-            Swap(heighst, i);
-            MaxHeapify(heighst);
-        }
-    }
-    private void MinHeapify(int i)
-    {
-        int left = ChildL(i);
-        int right = ChildR(i);
-
-        int lowest = i;
-
-        if (left <= heapSize && queue[lowest].Priority > queue[left].Priority)
-            lowest = left;
-        if (right <= heapSize && queue[lowest].Priority > queue[right].Priority)
-            lowest = right;
-
-        if (lowest != i)
-        {
-            Swap(lowest, i);
-            MinHeapify(lowest);
-        }
-    }
-
-        private void Swap(int i, int j)
-        {
-            var temp = queue[i];
-            queue[i] = queue[j];
-            queue[j] = temp;
-        }
-        private int ChildL(int i)
-        {
-            return i * 2 + 1;
-        }
-        private int ChildR(int i)
-        {
-            return i * 2 + 2;
-        }
 }

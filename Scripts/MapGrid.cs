@@ -35,17 +35,12 @@ public class MapGrid: Graph{
         boxSize = _boxSize;
     }
 
-    public void setMaskItem(int x, int y, int z, bool value){
+    public override void setMaskItem(int x, int y, int z, bool value){
         collisionMask[x, y, z] = value;
     }
 
     public bool getMaskItem(int x, int y, int z){
         return collisionMask[x, y, z];
-    }
-
-    /* Gets euclidean distance between two boxes */
-    public float euclideanDistance(int x1, int y1, int z1, int x2, int y2, int z2){
-        return Mathf.Sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) + (z1-z2)*(z1-z2)) * boxSize;
     }
 
     /* Gets euclidean distance between two cells */
@@ -55,12 +50,6 @@ public class MapGrid: Graph{
         // return (1 / FastInvSqrt((a[0]-b[0])*(a[0]-b[0]) + (a[1]-b[1])*(a[1]-b[1]) + (a[2]-b[2])*(a[2]-b[2]))) * boxSize;
         return Mathf.Sqrt((a[0]-b[0])*(a[0]-b[0]) + (a[1]-b[1])*(a[1]-b[1]) + (a[2]-b[2])*(a[2]-b[2])) * boxSize;
     }
-
-    /* Gets manhattan distance between two boxes */
-    public float manhattanDistance(int x1, int y1, int z1, int x2, int y2, int z2){
-        return (Mathf.Abs(x1-x2) + Mathf.Abs(y1-y2) + Mathf.Abs(z1-z2) * boxSize);
-    }
-
 
     public override Cell[,,] createGraph(){
         Cell[,,] _cellGrid = new Cell[(int)size[0], (int)size[1], (int)size[2]];
@@ -87,13 +76,6 @@ public class MapGrid: Graph{
 
     }
 
-
-    public void checkCell(){
-        Debug.Log("Check");
-        Debug.Log(this.cellGrid[(int)1,(int)1,(int)1]);
-    }
-
-
     public override Cell[] GetNeighbours(Cell cell){
 
         Cell[] result = new Cell[26];
@@ -103,7 +85,6 @@ public class MapGrid: Graph{
         for (int i=-1; i<=1; i++){
             for (int j=-1; j<=1; j++){
                 for (int k=-1; k<=1; k++){
-                    // Debug.Log(string.Format("{0}, {1}, {2} ", i, j, k));
                     if (!(i==0 && j==0 && k==0)){
                         try{
                             result[resnum] = cellGrid[cell.position[0] + i, cell.position[1] + j, cell.position[2] + k];
