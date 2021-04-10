@@ -68,7 +68,6 @@ public class ObjectDetectionGrid : MonoBehaviour
                     // collisionMask[x, y, z] = false;
 
                     Collider[] hitColliders = Physics.OverlapBox(new Vector3(x*boxSize + startPosition[0], y*boxSize+ startPosition[1], z*boxSize+ startPosition[2]), new Vector3(objectRadius, objectRadius, objectRadius), Quaternion.identity, m_LayerMask);
-                    // Collider[] hitColliders = Physics.OverlapSphere(new Vector3(x*boxSize + startPosition[0], y*boxSize+ startPosition[1], z*boxSize+ startPosition[2]), objectRadius, m_LayerMask);
 
                     if (hitColliders.Length > 0){
                         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -76,9 +75,7 @@ public class ObjectDetectionGrid : MonoBehaviour
                         cube.transform.position = new Vector3(x*boxSize + startPosition[0], y*boxSize+ startPosition[1], z*boxSize+ startPosition[2]);
                         cube.GetComponent<Renderer>().material.color = Color.red;
 
-                        // collisionMask[x, y, z] = true;
                         grid.setMaskItem(x, y, z, false);
-                        // Debug.Log(collisionMask[x, y, z]);
                     }
                     else{
                         grid.setMaskItem(x, y, z, true);
@@ -86,17 +83,9 @@ public class ObjectDetectionGrid : MonoBehaviour
 
                     sample++;
 
-                    if (sample%percent == 0){
-                        // percentage = sample / numSamples * 100;
-                        Debug.Log((float)sample / (float)numSamples * 100);
-                    }
-
-                    // Debug.Log(collisionMask[x, y, z]);
-
-
-
-                    // {Debug.Log(hitColliders);};
-                    // Debug.Log(hitColliders.Length);
+                    // if (sample%percent == 0){
+                    //     Debug.Log((float)sample / (float)numSamples * 100);
+                    // }
                 }
             }
         }
@@ -106,64 +95,10 @@ public class ObjectDetectionGrid : MonoBehaviour
         Debug.Log(endTime-startTime);
 
 
-        GameStorage storage = gameObject.AddComponent( typeof(GameStorage)) as GameStorage;
+        GraphStorage storage = gameObject.AddComponent( typeof(GraphStorage)) as GraphStorage;
 
         storage.Save(grid);
         Debug.Log(Application.persistentDataPath);
-
-
-
-        Cell[,,] graph = grid.createCellGrid();
-
-        // Debug.Log(graph[1,1,1]);
-
-
-        Cell a = grid.findCellByXYZ(0, 0, 0);
-
-        Debug.Log(a.position[0]);
-        Debug.Log(a.position[1]);
-        Debug.Log(a.position[2]);
-        // grid.checkCell();
-
-        Debug.Log("Graph");
-
-        // Debug.Log(graph[1,1,1]);
-        // Debug.Log(grid.cellGrid[2,0,0]);
-
-        // for(int i=0; i<50; i++){
-        //     for(int j=0; i<; i++){
-        //         for(int k=0; i<size[2]; i++){
-
-        // Debug.Log(grid.cellGrid[0, 0, 0].empty);
-
-        // for (int x=0; x<numBoxes; x++){
-        //     for (int y=0; y<numBoxes; y++){
-        //         for (int z=0; z<numBoxes; z++){
-
-        //         Debug.Log(collisionMask[x, y, z]);
-
-        //         }}}
-
-        // Debug.Log(collisionMask[0, 0, 0]);
-        // GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        // cube.transform.position = new Vector3(0, 0.5f, 0);
-
-
-        // Astar astar = new Astar()
-
-
-
-
-
-
-
-
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
         
     }
 }

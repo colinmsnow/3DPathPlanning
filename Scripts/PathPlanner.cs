@@ -8,7 +8,7 @@ public class PathPlanner : MonoBehaviour{
 
     public Vector3 origin;
     public Vector3 target;
-    private MapGrid mapgrid;
+    private Graph mapgrid;
 
 
     void Update()
@@ -16,7 +16,7 @@ public class PathPlanner : MonoBehaviour{
 
         if (Input.GetKeyDown("space")){
             Debug.Log("pressed space");
-            GameStorage storage = gameObject.AddComponent( typeof(GameStorage)) as GameStorage;
+            GraphStorage storage = gameObject.AddComponent( typeof(GraphStorage)) as GraphStorage;
 
             int startTime = Environment.TickCount;
             mapgrid = storage.Load();
@@ -26,7 +26,7 @@ public class PathPlanner : MonoBehaviour{
             Debug.Log(mapgrid);
 
             startTime = Environment.TickCount;
-            Cell[,,] graph = mapgrid.createCellGrid();
+            Cell[,,] graph = mapgrid.createGraph();
             endTime = Environment.TickCount;
             Debug.Log(string.Format("Time to create grid: {0}", endTime-startTime));
 
@@ -39,7 +39,6 @@ public class PathPlanner : MonoBehaviour{
             var answer = astar.search(floatorigin, floattarget);
             endTime = Environment.TickCount;
             Debug.Log(string.Format("Time to search: {0}", endTime-startTime));
-            // Debug.Log(answer);
 
             List<Vector3> vectorPath;
 
@@ -56,23 +55,12 @@ public class PathPlanner : MonoBehaviour{
             }
 
             foreach(Vector3 vec in vectorPath){
-                Debug.Log(vec.ToString());
+                // Debug.Log(vec.ToString());
                 GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube.transform.localScale = new Vector3(mapgrid.boxSize, mapgrid.boxSize, mapgrid.boxSize);
+                cube.transform.localScale = new Vector3(.5f, .5f, .5f);
                 cube.transform.position = vec;
                 cube.GetComponent<Renderer>().material.color = Color.green;
             }
-
-
-
-
-            // Debug.Log(string.Format("ANSWER: {0},{1},{2}", answer.position[0], answer.position[1], answer.position[2]));
         }
-
-
-
-
-
-
     }
 }

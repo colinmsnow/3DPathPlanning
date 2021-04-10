@@ -6,7 +6,7 @@ using System;
 /* Implements the A* algorithm in 3d.
 
 Inputs:
-    a MapGrid Object
+    a Graph Object
     An origin point
     A target point
 
@@ -19,26 +19,17 @@ Returns:
     Hovering around 1000 ms for .5 grid and 36 ms for 1 grid and 29045 for .25 grid
     Heap around 479 ms for .5 grid and 35 ms for 1 grid and 16380 for .25 grid
 
-
-    Notes:
-
-    Use priority queue to choose elements (heap)
-
-
-
-
 */
 
 public class Astar
 {
 
-    public MapGrid grid;
+    public Graph grid;
     public float[] target;
     public float[] origin;
 
     HashSet<Cell> openList = new HashSet<Cell>();
     HashSet<Cell> closedList = new HashSet<Cell>();
-    // C5.IntervalHeap<Cell> heap = new IntervalHeap<Cell>(1000, new CellCompare());
     PriorityQueue<Cell> queue = new PriorityQueue<Cell>(true);
 
     private List<Cell> generatedPath;
@@ -46,7 +37,7 @@ public class Astar
 
     private Astar () { }
 
-    public Astar (MapGrid _grid){
+    public Astar (Graph _grid){
         grid = _grid;
         // target = _target;
         // origin = _origin;
@@ -71,20 +62,20 @@ public class Astar
 
         int remaining = 0;
 
-        Debug.Log(originCell.position[0]);
-        Debug.Log(originCell.position[1]);
-        Debug.Log(originCell.position[2]);
+        // Debug.Log(originCell.position[0]);
+        // Debug.Log(originCell.position[1]);
+        // Debug.Log(originCell.position[2]);
 
-        Debug.Log(targetCell.position[0]);
-        Debug.Log(targetCell.position[1]);
-        Debug.Log(targetCell.position[2]);
+        // Debug.Log(targetCell.position[0]);
+        // Debug.Log(targetCell.position[1]);
+        // Debug.Log(targetCell.position[2]);
 
         int numiters = 0;
 
 
 
 
-        originCell.heuristic = grid.euclideanDistanceCell(originCell, targetCell);
+        originCell.heuristic = grid.Distance(originCell, targetCell);
         openList.Add(originCell);
         queue.Enqueue(0, originCell);
         // heap.Add(originCell);
@@ -112,7 +103,7 @@ public class Astar
 
 
             GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.transform.localScale = new Vector3(grid.boxSize/4, grid.boxSize/4, grid.boxSize/4);
+            cube.transform.localScale = new Vector3(.25f, .25f, .25f);
             cube.transform.position = CellToVector(bestCell);
             Color theColorToAdjust = Color.yellow;
             theColorToAdjust.a = 0f; // Completely transparent
@@ -137,9 +128,9 @@ public class Astar
                 }
 
                 // var g = bestCell.cost + (curCell.position - bestCell.position).magnitude;
-                var g = bestCell.cost + grid.euclideanDistanceCell(curCell, bestCell);
+                var g = bestCell.cost + grid.Distance(curCell, bestCell);
 
-                var h = grid.euclideanDistanceCell(curCell, targetCell);
+                var h = grid.Distance(curCell, targetCell);
 
                 if (openList.Contains(curCell) && curCell.f < (g + h))
                     continue;
@@ -167,22 +158,22 @@ public class Astar
 
     }
 
-    private Cell GetBestCell ()
-    {
-        Cell result = null;
-        float currentF = float.PositiveInfinity;
+    // private Cell GetBestCell ()
+    // {
+    //     Cell result = null;
+    //     float currentF = float.PositiveInfinity;
 
-        foreach(Cell cell in openList)
-        {
-            if (cell.f < currentF)
-            {
-                currentF = cell.f;
-                result = cell;
-            }
-        }
+    //     foreach(Cell cell in openList)
+    //     {
+    //         if (cell.f < currentF)
+    //         {
+    //             currentF = cell.f;
+    //             result = cell;
+    //         }
+    //     }
 
-        return result;
-    }
+    //     return result;
+    // }
 
     private List<Cell> CreatePath(Cell destination){
 
@@ -194,7 +185,7 @@ public class Astar
         {
             current = current.parent;
             path.Add(current);
-            current.printCell();
+            // current.printCell();
         }
 
         path.Reverse();
@@ -204,30 +195,13 @@ public class Astar
     }
 
     public List<Vector3> PathToVectors(){
-
-        List<Vector3> vectorPath = new List<Vector3>();
-        Vector3 startpos = new Vector3(grid.startPosition[0], grid.startPosition[1], grid.startPosition[2]);
-
-        foreach(Cell cell in generatedPath){
-            Vector3 boxpos = new Vector3(cell.position[0], cell.position[1], cell.position[2]);
-            boxpos *=grid.boxSize;
-            boxpos = boxpos + startpos;
-            // boxpos *=grid.boxSize;
-            vectorPath.Add(boxpos);
-        }
-
-
-
+        // Vector3 startpos = new Vector3(grid.startPosition[0], grid.startPosition[1], grid.startPosition[2]);
+        List<Vector3> vectorPath = grid.PathToVectors(generatedPath);
         return vectorPath;
     }
 
     public Vector3 CellToVector(Cell cell){
-    
-        Vector3 startpos = new Vector3(grid.startPosition[0], grid.startPosition[1], grid.startPosition[2]);
-        Vector3 boxpos = new Vector3(cell.position[0], cell.position[1], cell.position[2]);
-        boxpos *=grid.boxSize;
-        boxpos = boxpos + startpos;
-        return boxpos;
+        return grid.CellToVector(cell);
     }
 
     
