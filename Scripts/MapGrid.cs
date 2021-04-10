@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+// using System.Runtime.InteropServices;
 
 
 /* 
@@ -52,6 +53,7 @@ public class MapGrid{
     public float euclideanDistanceCell(Cell one, Cell two){
         int[] a = one.position;
         int[] b = two.position;
+        // return (1 / FastInvSqrt((a[0]-b[0])*(a[0]-b[0]) + (a[1]-b[1])*(a[1]-b[1]) + (a[2]-b[2])*(a[2]-b[2]))) * boxSize;
         return Mathf.Sqrt((a[0]-b[0])*(a[0]-b[0]) + (a[1]-b[1])*(a[1]-b[1]) + (a[2]-b[2])*(a[2]-b[2])) * boxSize;
     }
 
@@ -128,6 +130,21 @@ public class MapGrid{
         return result;
     }
 
+    // [StructLayout(LayoutKind.Explicit)]
+    // struct intfloatunion {
+    //     [FieldOffset(0)]
+    //     public float f;
+    //     [FieldOffset(0)]
+    //     public int i;
+    // }
+ 
+    // private float FastInvSqrt(float num){
+    //         intfloatunion ifu = new intfloatunion();
+    //         ifu.f = num;
+    //         ifu.i = 1597463174 - (ifu.i >> 1);
+    //         return ifu.f * (1.5f - (0.5f * ifu.f * ifu.f * ifu.f));
+    //     }
+
 }
 [Serializable]
 public class Cell {
@@ -195,7 +212,11 @@ public class GameStorage : MonoBehaviour {
          }
          return null;
      }
+
 }
+
+
+
 
 
 

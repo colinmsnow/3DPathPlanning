@@ -17,6 +17,7 @@ Returns:
 
 
     Hovering around 1000 ms for .5 grid and 36 ms for 1 grid and 29045 for .25 grid
+    Heap around 479 ms for .5 grid and 35 ms for 1 grid and 16380 for .25 grid
 
 
     Notes:
@@ -110,12 +111,12 @@ public class Astar
             // }
 
 
-            // GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            // cube.transform.localScale = new Vector3(grid.boxSize/4, grid.boxSize/4, grid.boxSize/4);
-            // cube.transform.position = CellToVector(bestCell);
-            // Color theColorToAdjust = Color.yellow;
-            // theColorToAdjust.a = 0f; // Completely transparent
-            // cube.GetComponent<Renderer>().material.color = theColorToAdjust;
+            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cube.transform.localScale = new Vector3(grid.boxSize/4, grid.boxSize/4, grid.boxSize/4);
+            cube.transform.position = CellToVector(bestCell);
+            Color theColorToAdjust = Color.yellow;
+            theColorToAdjust.a = 0f; // Completely transparent
+            cube.GetComponent<Renderer>().material.color = theColorToAdjust;
 
 
             for (int i = 0; i < 26; i++)
@@ -150,12 +151,13 @@ public class Astar
                 curCell.parent = bestCell;
 
                 if (!closedList.Contains(bestCell))
-                closedList.Add(bestCell);
+                    closedList.Add(bestCell);
 
-                if (!openList.Contains(curCell))
+                if (!openList.Contains(curCell)){
                     openList.Add(curCell);
                     queue.Enqueue(curCell.f, curCell);
                     remaining++;
+                }
             }
         
         }

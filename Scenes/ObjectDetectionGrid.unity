@@ -535,8 +535,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startPosition: {x: -10, y: -10, z: -10}
-  numBoxes: 22
-  boxSize: 1
+  numBoxes: 100
+  boxSize: 0.25
   objectRadius: 1
   m_LayerMask:
     serializedVersion: 2
