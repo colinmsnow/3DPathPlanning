@@ -529,14 +529,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 930974422}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d02c695051a204d7bb92b15f40f3a5aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   startPosition: {x: -10, y: -10, z: -10}
-  numBoxes: 50
-  boxSize: 0.5
+  numBoxes: 22
+  boxSize: 1
   objectRadius: 1
   m_LayerMask:
     serializedVersion: 2

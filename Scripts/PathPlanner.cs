@@ -18,18 +18,27 @@ public class PathPlanner : MonoBehaviour{
             Debug.Log("pressed space");
             GameStorage storage = gameObject.AddComponent( typeof(GameStorage)) as GameStorage;
 
+            int startTime = Environment.TickCount;
             mapgrid = storage.Load();
+            int endTime = Environment.TickCount;
+            Debug.Log(string.Format("Time to load: {0}", endTime-startTime));
 
             Debug.Log(mapgrid);
 
+            startTime = Environment.TickCount;
             Cell[,,] graph = mapgrid.createCellGrid();
+            endTime = Environment.TickCount;
+            Debug.Log(string.Format("Time to create grid: {0}", endTime-startTime));
 
             Astar astar = new Astar(mapgrid);
 
             float[] floatorigin = new float[] {origin[0], origin[1], origin[2]};
             float[] floattarget = new float[] {target[0], target[1], target[2]};
 
+            startTime = Environment.TickCount;
             var answer = astar.search(floatorigin, floattarget);
+            endTime = Environment.TickCount;
+            Debug.Log(string.Format("Time to search: {0}", endTime-startTime));
             // Debug.Log(answer);
 
             List<Vector3> vectorPath;
@@ -39,7 +48,11 @@ public class PathPlanner : MonoBehaviour{
                 vectorPath = null;
             }
             else{
+                startTime = Environment.TickCount;
                 vectorPath = astar.PathToVectors();
+                endTime = Environment.TickCount;
+                Debug.Log(string.Format("Time to convert to vector: {0}", endTime-startTime));
+                
             }
 
             foreach(Vector3 vec in vectorPath){
