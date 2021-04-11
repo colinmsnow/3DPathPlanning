@@ -61,7 +61,33 @@ public class Astar
         queue.Enqueue(0, originCell);
         remaining++;
 
+        GameObject cube1 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        cube1.transform.localScale = new Vector3(2f, 2f, 2f);
+        cube1.transform.position = CellToVector(originCell);
+        // Color theColorToAdjust = Color.yellow;
+        // theColorToAdjust.a = 0f; // Completely transparent
+        cube1.GetComponent<Renderer>().material.color = Color.blue;
+
+        GameObject cube2 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        cube2.transform.localScale = new Vector3(2f, 2f, 2f);
+        cube2.transform.position = CellToVector(targetCell);
+        // Color theColorToAdjust = Color.yellow;
+        // theColorToAdjust.a = 0f; // Completely transparent
+        cube2.GetComponent<Renderer>().material.color = Color.cyan;
+
+
+
+
+
+
+
+
+
+
+
         while (remaining>0){ // It isnt empty
+
+            Debug.Log(string.Format("Remaining: {0}", remaining));
 
             numiters++;
 
@@ -72,20 +98,31 @@ public class Astar
             var neighbours = grid.GetNeighbours(bestCell);
 
 
-            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cube.transform.localScale = new Vector3(.25f, .25f, .25f);
+            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            cube.transform.localScale = new Vector3(.7f, .7f, .7f);
             cube.transform.position = CellToVector(bestCell);
-            Color theColorToAdjust = Color.yellow;
-            theColorToAdjust.a = 0f; // Completely transparent
-            cube.GetComponent<Renderer>().material.color = theColorToAdjust;
+            // Color theColorToAdjust = Color.yellow;
+            // theColorToAdjust.a = 0f; // Completely transparent
+            cube.GetComponent<Renderer>().material.color = Color.yellow;
 
 
-            for (int i = 0; i < 26; i++)
+            Debug.Log(string.Format("Length of neighbours: {0}", neighbours.Length));
+
+            for (int i = 0; i < neighbours.Length; i++)
             {
+
+                Debug.Log("looping");
+                
+                
                 var curCell = neighbours[i];
 
-                if (curCell == null)
-                    continue;
+                // Debug.Log("looping2");
+
+                
+
+                if (curCell == null){
+                    Debug.Log("Cur cell is null");
+                    continue;}
                 if (curCell == targetCell)
                 {
                     curCell.parent = bestCell;
@@ -94,30 +131,43 @@ public class Astar
                 }
 
                 if (!curCell.empty){
+                    Debug.Log("Cur cell is not empty");
                     continue;
                 }
+
+                
 
                 var g = bestCell.cost + grid.Distance(curCell, bestCell);
 
                 var h = grid.Distance(curCell, targetCell);
 
-                if (openList.Contains(curCell) && curCell.f < (g + h))
+                if (openList.Contains(curCell) && curCell.f < (g + h)){
+                    Debug.Log("Cur cell is in open list and f<g+h");
                     continue;
-                if (closedList.Contains(curCell) && curCell.f < (g + h))
+                    }   
+                if (closedList.Contains(curCell) && curCell.f < (g + h)){
+                    Debug.Log("Cur cell is in closed list and f<g+h");
                     continue;
+                }
 
                 curCell.cost = g;
                 curCell.heuristic = h;
                 curCell.parent = bestCell;
 
-                if (!closedList.Contains(bestCell))
+                
+
+                if (!closedList.Contains(bestCell)){
+                    Debug.Log("Added to closed list");
                     closedList.Add(bestCell);
+                }
 
                 if (!openList.Contains(curCell)){
+                    Debug.Log("Added to queue");
                     openList.Add(curCell);
                     queue.Enqueue(curCell.f, curCell);
                     remaining++;
                 }
+                
             }
         
         }
