@@ -135,6 +135,8 @@ public class BoundingBoxGraphCreator : MonoBehaviour{
                 //Vector3.Distance(vectorPath[i], vectorPath[i-1])
             }
 
+            Debug.Log(string.Format("StraightLineRatio: {0}", astar.StraightLineRatio()));
+
 
 
 

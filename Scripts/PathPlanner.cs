@@ -78,6 +78,9 @@ public class PathPlanner : MonoBehaviour{
                 cube.transform.position = vec;
                 cube.GetComponent<Renderer>().material.color = Color.green;
             }
+
+            Debug.Log(string.Format("StraightLineRatio: {0}", astar.StraightLineRatio()));
+
         }
     }
 }

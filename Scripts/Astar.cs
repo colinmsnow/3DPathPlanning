@@ -87,13 +87,19 @@ public class Astar
 
         while (remaining>0){ // It isnt empty
 
-            Debug.Log(string.Format("Remaining: {0}", remaining));
+            // Debug.Log(string.Format("Remaining: {0}", remaining));
 
             numiters++;
+
+            // Debug.Log(numiters);
 
             Cell bestCell = queue.Dequeue();
             openList.Remove(bestCell);
             remaining--;
+
+            if (bestCell ==  targetCell){
+                return CreatePath(bestCell);
+            }
 
             var neighbours = grid.GetNeighbours(bestCell);
 
@@ -106,12 +112,12 @@ public class Astar
             cube.GetComponent<Renderer>().material.color = Color.yellow;
 
 
-            Debug.Log(string.Format("Length of neighbours: {0}", neighbours.Length));
+            // Debug.Log(string.Format("Length of neighbours: {0}", neighbours.Length));
 
             for (int i = 0; i < neighbours.Length; i++)
             {
 
-                Debug.Log("looping");
+                // Debug.Log("looping");
                 
                 
                 var curCell = neighbours[i];
@@ -121,17 +127,13 @@ public class Astar
                 
 
                 if (curCell == null){
-                    Debug.Log("Cur cell is null");
+                    // Debug.Log("Cur cell is null");
                     continue;}
-                if (curCell == targetCell)
-                {
-                    curCell.parent = bestCell;
-                    Debug.Log(string.Format("Num iterations: {0}", numiters));
-                    return CreatePath(curCell);
-                }
+
+                
 
                 if (!curCell.empty){
-                    Debug.Log("Cur cell is not empty");
+                    // Debug.Log("Cur cell is not empty");
                     continue;
                 }
 
@@ -142,11 +144,11 @@ public class Astar
                 var h = grid.Distance(curCell, targetCell);
 
                 if (openList.Contains(curCell) && curCell.f < (g + h)){
-                    Debug.Log("Cur cell is in open list and f<g+h");
+                    // Debug.Log("Cur cell is in open list and f<g+h");
                     continue;
                     }   
                 if (closedList.Contains(curCell) && curCell.f < (g + h)){
-                    Debug.Log("Cur cell is in closed list and f<g+h");
+                    // Debug.Log("Cur cell is in closed list and f<g+h");
                     continue;
                 }
 
@@ -157,19 +159,17 @@ public class Astar
                 
 
                 if (!closedList.Contains(bestCell)){
-                    Debug.Log("Added to closed list");
+                    // Debug.Log("Added to closed list");
                     closedList.Add(bestCell);
                 }
 
                 if (!openList.Contains(curCell)){
-                    Debug.Log("Added to queue");
+                    // Debug.Log("Added to queue");
                     openList.Add(curCell);
                     queue.Enqueue(curCell.f, curCell);
                     remaining++;
                 }
-                
             }
-        
         }
         return null;
     }
@@ -199,5 +199,15 @@ public class Astar
 
     public Vector3 CellToVector(Cell cell){
         return grid.CellToVector(cell);
+    }
+
+    public float StraightLineRatio(){
+        List<Vector3> vectorPath = grid.PathToVectors(generatedPath);
+        float optimal = Vector3.Distance(vectorPath[0], vectorPath[vectorPath.Count-1]);
+        float sum = 0;
+        for(int i=1; i<vectorPath.Count; i++){
+            sum += Vector3.Distance(vectorPath[i], vectorPath[i-1]);
+        }
+        return sum/optimal;
     }
 }
