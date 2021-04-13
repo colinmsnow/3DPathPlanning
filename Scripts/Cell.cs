@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using UnityEngine;
 
 /*
 
@@ -21,9 +22,9 @@ public class Cell {
 
     public int[] position = new int[] {0, 0, 0};
     public float[] floatPosition;
-    public bool empty;
+    public bool empty = true;
 
-    public float cost, heuristic;
+    public float cost = float.PositiveInfinity, heuristic = float.PositiveInfinity;
     public float f
     {
         get { return cost + heuristic; }

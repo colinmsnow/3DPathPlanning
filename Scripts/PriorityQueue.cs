@@ -36,6 +36,11 @@ public class PriorityQueue<T>
         _isMinPriorityQueue = isMinPriorityQueue;
     }
 
+    public bool isEmpty(){
+        // Debug.Log("Heap size is" + heapSize.ToString());
+        return (heapSize < 0);
+    }
+
 
     /// <summary>
     /// Enqueue the object with priority
