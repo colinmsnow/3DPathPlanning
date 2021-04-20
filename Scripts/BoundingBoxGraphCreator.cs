@@ -15,6 +15,8 @@ public class BoundingBoxGraphCreator : MonoBehaviour{
 
     private List<Vector3> points = new List<Vector3>();
     public LayerMask layerMask;
+    public float offset;
+
 
     void Start(){
 
@@ -38,17 +40,27 @@ public class BoundingBoxGraphCreator : MonoBehaviour{
             Vector3 boundPoint1 = obj.GetComponent<Collider>().bounds.min;
             Vector3 boundPoint2 = obj.GetComponent<Collider>().bounds.max;
 
-            Vector3[] boundPoints = new Vector3[] {obj.GetComponent<Collider>().bounds.min, obj.GetComponent<Collider>().bounds.max, new Vector3(boundPoint1.x, boundPoint1.y, boundPoint2.z), new Vector3(boundPoint1.x, boundPoint2.y, boundPoint1.z), new Vector3(boundPoint2.x, boundPoint1.y, boundPoint1.z), new Vector3(boundPoint1.x, boundPoint2.y, boundPoint2.z), new Vector3(boundPoint2.x, boundPoint1.y, boundPoint2.z), new Vector3(boundPoint2.x, boundPoint2.y, boundPoint1.z)};
+            Vector3[] boundPoints = new Vector3[] {
+             new Vector3(boundPoint1.x-offset, boundPoint1.y-offset, boundPoint1.z-offset),
+             new Vector3(boundPoint2.x+offset, boundPoint2.y+offset, boundPoint2.z+offset),
+             new Vector3(boundPoint1.x-offset, boundPoint1.y-offset, boundPoint2.z+offset),
+             new Vector3(boundPoint1.x-offset, boundPoint2.y+offset, boundPoint1.z-offset),
+             new Vector3(boundPoint2.x+offset, boundPoint1.y-offset, boundPoint1.z-offset),
+             new Vector3(boundPoint1.x-offset, boundPoint2.y+offset, boundPoint2.z+offset),
+             new Vector3(boundPoint2.x+offset, boundPoint1.y-offset, boundPoint2.z+offset),
+             new Vector3(boundPoint2.x+offset, boundPoint2.y+offset, boundPoint1.z-offset)};
 
 
             foreach(Vector3 point in boundPoints){
 
                 points.Add(point);
 
+            
                 GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 cube.transform.localScale = new Vector3(.1f, .1f, .1f);
                 cube.transform.position = point;
                 cube.GetComponent<Renderer>().material.color = Color.red;
+            
 
             }
 
@@ -130,10 +142,13 @@ public class BoundingBoxGraphCreator : MonoBehaviour{
                 cube.GetComponent<Renderer>().material.color = Color.green;
             }
 
-            for (int i=1; i<vectorPath.Count; i++){
-                Debug.DrawRay(vectorPath[i], vectorPath[i-1] - vectorPath[i], Color.green, 1000, false);
-                //Vector3.Distance(vectorPath[i], vectorPath[i-1])
-            }
+ 
+
+                for (int i=1; i<vectorPath.Count; i++){
+                    Debug.DrawRay(vectorPath[i], vectorPath[i-1] - vectorPath[i], Color.green, 1000, false);
+                    //Vector3.Distance(vectorPath[i], vectorPath[i-1])
+                }
+            
 
             Debug.Log(string.Format("StraightLineRatio: {0}", astar.StraightLineRatio()));
 

@@ -101,7 +101,14 @@ public class Astar
             for (int i = 0; i < neighbours.Length; i++){
 
 
+
                 Cell neighbour = neighbours[i];
+
+
+                GameObject checkedneighbour = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                checkedneighbour.transform.localScale = new Vector3(1f, 1f, 1f);
+                checkedneighbour.transform.position = CellToVector(neighbour);
+                checkedneighbour.GetComponent<Renderer>().material.color = Color.yellow;
 
                 // Debug.Log(neighbour);
                 // Debug.Log(neighbour.empty);
@@ -148,10 +155,22 @@ public class Astar
         var path = new List<Cell>() { destination };
 
         var current = destination;
+
+        if (current.floatPosition != null){
         while (current.parent != null)
-        {
-            current = current.parent;
-            path.Add(current);
+            {
+
+                var neighbours = current.neighbours;
+
+                // foreach (Cell neighbour in neighbours){
+                //     Debug.DrawRay(floattovec3(current.floatPosition), floattovec3(neighbour.floatPosition) - floattovec3(current.floatPosition), Color.red, 1000, false);
+                // }
+                // Debug.DrawRay(floattovec3(current.floatPosition), floattovec3(parent.floatPosition) - floattovec3(current.floatPosition), Color.red, 1000, false);
+                current = current.parent;
+                path.Add(current);
+
+                
+            }
         }
 
         path.Reverse();
@@ -177,5 +196,15 @@ public class Astar
             sum += Vector3.Distance(vectorPath[i], vectorPath[i-1]);
         }
         return sum/optimal;
+    }
+
+    private float[] vec3tofloat(Vector3 input){
+        return new float[] {input[0], input[1], input[2]};
+        
+    }
+
+    private Vector3 floattovec3(float[] input){
+        return new Vector3 (input[0], input[1], input[2]);
+        
     }
 }
