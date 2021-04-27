@@ -45,6 +45,10 @@ public class Cell {
 
     }
 
+    // public bool positionIs(Vector3 a){
+    //     return (floatPosition[0] == a[0] && floatPosition[1] == a[1] && floatPosition[2] == a[2]);
+    // }
+
     public void printCell(){
         Debug.Log(string.Format("Cell position: {0}, {1}, {2}, empty: {3}, parent: {4}, cost: {5}, heuristic: {6}", position[0], position[1], position[2], empty, parent, cost, heuristic));
     }

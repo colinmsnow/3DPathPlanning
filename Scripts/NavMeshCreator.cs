@@ -90,26 +90,31 @@ public class NavMeshCreator : MonoBehaviour{
         */
 
 
-        Vector3 point1 = new Vector3(0,2.2f,0);
-        Vector3 point2 = new Vector3(1,1,1);
-        Vector3 point3 = new Vector3(1,-3,4);
-        Vector3 point4 = new Vector3(-2,2,1);
-        Vector3 pointnew = new Vector3(-2,3,1);
-        Vector3 pointnew2 = new Vector3(-.319f,1.94f,2.1f);
+        // Vector3 point1 = new Vector3(0,2.2f,0);
+        // Vector3 point2 = new Vector3(1,1,1);
+        // Vector3 point3 = new Vector3(1,-3,4);
+        // Vector3 point4 = new Vector3(-2,2,1);
+        // Vector3 pointnew = new Vector3(-2,3,1);
+        // Vector3 pointnew2 = new Vector3(-.319f,1.94f,2.1f);
 
-        List<Vector3> tetpoints = new List<Vector3>();
-        tetpoints.Add(point1);
-        tetpoints.Add(point2);
-        tetpoints.Add(point3);
-        tetpoints.Add(point4);
-        tetpoints.Add(pointnew);
-        tetpoints.Add(pointnew2);
+        // List<Vector3> tetpoints = new List<Vector3>();
+        // tetpoints.Add(point1);
+        // tetpoints.Add(point2);
+        // tetpoints.Add(point3);
+        // tetpoints.Add(point4);
+        // tetpoints.Add(pointnew);
+        // tetpoints.Add(pointnew2);
 
 
-        Vector3 point5 = new Vector3(6.25f,-5,-5);
-        Vector3 point6 = new Vector3(5,5,5);
-        Vector3 point7 = new Vector3(-5,5,0);
-        Vector3 point8 = new Vector3(0,-5,5);
+        // Vector3 point5 = new Vector3(6.25f,-5,-5);
+        // Vector3 point6 = new Vector3(5,5,5);
+        // Vector3 point7 = new Vector3(-5,5,0);
+        // Vector3 point8 = new Vector3(0,-5,5);
+
+        Vector3 point5 = new Vector3(11,620,15);
+        Vector3 point6 = new Vector3(-512,-115,340);
+        Vector3 point7 = new Vector3(4,-115,-495);
+        Vector3 point8 = new Vector3(544,-115,340);
 
         List<Vector3> tetbounding = new List<Vector3>();
         tetbounding.Add(point5);
@@ -131,8 +136,14 @@ public class NavMeshCreator : MonoBehaviour{
 
         tetrahedra.Add(initialtet);
 
+        int c = 0;
 
-        foreach (Vector3 p in tetpoints){
+
+        // Sorting points dramatically reduces runtime
+        points.Sort((a, b)=> a[0].CompareTo(b[0]));
+
+
+        foreach (Vector3 p in points){
             // Iterate through points adding one at a time
 
             badTetrahedra.Clear();
@@ -154,10 +165,6 @@ public class NavMeshCreator : MonoBehaviour{
 
             foreach(Tetrahedron tet in badTetrahedra){
                 // Need to add triangle face which is not shared by any other tetrahedron
-
-                // TODO: Theres an error here I am getting all unique faces but what
-                // I actually want is to get only faces that don't appear more than once
-
                 var tetfaces = tet.faces();
                 
                 // Add all faces
@@ -165,23 +172,6 @@ public class NavMeshCreator : MonoBehaviour{
                     faces.Add(face);
                 }
 
-                // Remove any that are duplicated
-
-
-
-
-                // foreach(Face face in tetfaces){
-
-                //     bool present = false;
-                //     foreach (Face newface in faces){
-                //         if (newface.equals(face)){
-                //             present=true;
-                //         }
-                //     }
-                //     if (!present){
-                //         faces.Add(face);
-                //     }
-                // }
             }
 
 
@@ -200,17 +190,6 @@ public class NavMeshCreator : MonoBehaviour{
                 }
             }
 
-
-
-
-
-
-
-
-
-
-
-
             Debug.Log(String.Format("Number of faces: {0}", newfaces.Count));
 
 
@@ -224,18 +203,15 @@ public class NavMeshCreator : MonoBehaviour{
 
             foreach(Tetrahedron tet in badTetrahedra){
                 // Want to remove that tetrahedron and create new ones to fill space
-
-                // Remove
                 tetrahedra.Remove(tet);
-
             }
-
 
             Debug.Log("Ending first tetrahedron");
 
+            // if(c == 300){break;}
 
+            c++;
         }
-
 
 
         // Delete tetrahedra which have one of the bounding vertices
@@ -248,65 +224,17 @@ public class NavMeshCreator : MonoBehaviour{
             }
         }
 
-        foreach(Tetrahedron tet in filteredTetrahedra){
-            tet.display();
-        }
+        int endTime = Environment.TickCount;
+        Debug.Log(string.Format("Time to load: {0}", endTime-startTime));
+
+        // foreach(Tetrahedron tet in filteredTetrahedra){
+        //     tet.display();
+        // }
 
         Debug.Log(String.Format("Number of tetrahedra: {0}", filteredTetrahedra.Count));
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // double[] point1 = new double[] {0, 0, 0};
-        // double[] point2 = new double[] {1, 1, 1};
-        // double[] point3 = new double[] {2, 5, 7};
-        // double[] point4 = new double[] {3, -4, 6};
-        
-
-        // var solver = new CircumcentreSolver(point1, point2, point3, point4);
-
-        // Debug.Log(solver.Centre[0]);
-        // Debug.Log(solver.Centre[1]);
-        // Debug.Log(solver.Centre[2]);
-        // Debug.Log(solver.Radius);
-
-        // Vector3 point1 = new Vector3(0,0,0);
-        // Vector3 point2 = new Vector3(1,1,1);
-        // Vector3 point3 = new Vector3(5,-3,6);
-        // Vector3 point4 = new Vector3(-4,7,9);
-
-        // List<Vector3> tetpoints = new List<Vector3>();
-        // tetpoints.Add(point1);
-        // tetpoints.Add(point2);
-        // tetpoints.Add(point3);
-        // tetpoints.Add(point4);
-
-
-        foreach (Vector3 a in tetpoints){
+        foreach (Vector3 a in points){
             GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 cube.transform.localScale = new Vector3(.1f, .1f, .1f);
                 cube.transform.position = a;
@@ -320,40 +248,77 @@ public class NavMeshCreator : MonoBehaviour{
                 cube.GetComponent<Renderer>().material.color = Color.green;
         }
 
-        // var tet = new Tetrahedron(point1, point2, point3, point4);
-
-
-        // GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        //         sphere.transform.localScale = new Vector3(tet.radius*2, tet.radius*2, tet.radius*2);
-        //         sphere.transform.position = tet.center;
-        //         sphere.GetComponent<Renderer>().material.color = Color.blue;
 
 
 
 
+
+
+
+
+        // Need to create a point graph that describes whether each point is connected to another point
+
+        bool[,] connectedGrid = new bool[points.Count, points.Count];
+
+
+        // Create a dictionary which maps a vector3 to an integer representing its place in points
+        Dictionary<Vector3, int> positionmap = new Dictionary<Vector3, int>();
+        for (int i=0; i<points.Count; i++){
+            positionmap.Add(points[i], i);
+        }
+
+        int numedges = 0;
+        int attempts = 0;
         
+        foreach(Tetrahedron tet in filteredTetrahedra){
+
+            List<Vector3> vertices = tet.vertices;
 
 
 
+            // For each pair of points see if the line hits an obstacle
+            for (int i=0; i<vertices.Count; i++){
+                for (int j=0; j<vertices.Count; j++){
+                    attempts++;
+                    if (i==j){continue;}
+
+
+                    
 
 
 
+                    RaycastHit hit;
+                    if (Physics.Raycast(vertices[i], vertices[j] - vertices[i], out hit, Vector3.Distance(vertices[i], vertices[j])))
+                        {
+                            Debug.DrawLine(vertices[i], vertices[j], Color.red, 100000, false);
+                            // Debug.Log("Did Hit");
+                            connectedGrid[positionmap[vertices[i]], positionmap[vertices[j]]] = false;
+                        }
+                        else
+                        {
+                            Debug.DrawRay(vertices[i], vertices[j] - vertices[i], Color.white, 100000, false);
+                            // connectedGrid[i, j] = true;
+                            connectedGrid[positionmap[vertices[i]], positionmap[vertices[j]]] = true;
+                            // Debug.Log("Did not Hit");
+                        }
+
+
+                }
+            }
 
 
 
+        }
+        
+        for(int i=0; i<points.Count; i++){
+            for (int j=0; j<points.Count; j++){
+                if (connectedGrid[i,j]){numedges++;}
+                
+            }
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
+        Debug.Log(String.Format("Number of edges: {0}", numedges/2));
+        Debug.Log(String.Format("Attempts: {0}", attempts));
 
 
         // // Iterate through each point and try to connect to each other point
@@ -488,6 +453,7 @@ public class Tetrahedron{
         facelist.Add(new Face(vertices[1], vertices[2], vertices[3]));
         return facelist;
     }
+
 
     public bool contains(Vector3 point){
         return (Vector3.Distance(point, center) < radius);
