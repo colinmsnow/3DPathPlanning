@@ -135,16 +135,20 @@ public class NavMeshCreator : MonoBehaviour{
         foreach (Vector3 p in tetpoints){
             // Iterate through points adding one at a time
 
+            badTetrahedra.Clear();
+
             Debug.Log("Starting first tetrahedron");
 
 
             foreach(Tetrahedron tet in tetrahedra){
                 if (tet.contains(p)){
                     badTetrahedra.Add(tet);
-                    Debug.Log("Found bad tetrahedron");
+                    // Debug.Log("Found bad tetrahedron");
                 
                 }
             }
+
+            Debug.Log(String.Format("Number of bad tetrahedra: {0}", badTetrahedra.Count));
 
             List<Face> faces = new List<Face>();
 
@@ -154,19 +158,33 @@ public class NavMeshCreator : MonoBehaviour{
                 var tetfaces = tet.faces();
 
                 foreach(Face face in tetfaces){
-                    if (!faces.Contains (face)){
-                        faces.Add(face);
-                        Debug.Log("Adding a face");
+
+                    bool present = false;
+
+                    foreach (Face newface in faces){
+                        if (newface.equals(face)){
+                            present=true;
+                        }
                     }
+
+                    if (!present){
+                        faces.Add(face);
+                    }
+                    // if (!faces.Contains (face)){
+                    //     faces.Add(face);
+                    //     // Debug.Log("Adding a face");
+                    // }
                 }
             }
+            Debug.Log(String.Format("Number of faces: {0}", faces.Count));
+
 
             foreach(Face face in faces){
 
                 // Create a new tetrahedron using this face and the test point
                 var newtet = new Tetrahedron(p, face.vertices[0], face.vertices[1], face.vertices[2]);
                 tetrahedra.Add(newtet);
-                Debug.Log("Created new tetrahedron");
+                // Debug.Log("Created new tetrahedron");
             }
 
             foreach(Tetrahedron tet in badTetrahedra){
@@ -198,6 +216,8 @@ public class NavMeshCreator : MonoBehaviour{
         foreach(Tetrahedron tet in filteredTetrahedra){
             tet.display();
         }
+
+        Debug.Log(String.Format("Number of tetrahedra: {0}", filteredTetrahedra.Count));
 
 
 
@@ -423,8 +443,6 @@ public class Tetrahedron{
         var solver = new CircumcentreSolver(vec3todouble(vertex1), vec3todouble(vertex2), vec3todouble(vertex3), vec3todouble(vertex4));
         center = new Vector3((float) solver.Centre[0], (float) solver.Centre[1], (float) solver.Centre[2]);
         radius = (float) solver.Radius;
-        Debug.Log(center);
-        Debug.Log(radius);
     }
 
     public List<Face> faces(){
@@ -494,7 +512,7 @@ public class Face{
         vertices.Add(c);
     }
 
-    public bool equals(Vector3 a, Vector3 b, Vector3 c){
-        return (vertices.Contains(a) && vertices.Contains(b) && vertices.Contains(c));
+    public bool equals(Face testface){
+        return (vertices.Contains(testface.vertices[0]) && vertices.Contains(testface.vertices[1]) && vertices.Contains(testface.vertices[2]));
     }
 }
