@@ -90,7 +90,7 @@ public class NavMeshCreator : MonoBehaviour{
         */
 
 
-        Vector3 point1 = new Vector3(0,0,0);
+        Vector3 point1 = new Vector3(0,2.2f,0);
         Vector3 point2 = new Vector3(1,1,1);
         Vector3 point3 = new Vector3(1,-3,4);
         Vector3 point4 = new Vector3(-2,2,1);
@@ -155,31 +155,66 @@ public class NavMeshCreator : MonoBehaviour{
             foreach(Tetrahedron tet in badTetrahedra){
                 // Need to add triangle face which is not shared by any other tetrahedron
 
+                // TODO: Theres an error here I am getting all unique faces but what
+                // I actually want is to get only faces that don't appear more than once
+
                 var tetfaces = tet.faces();
-
+                
+                // Add all faces
                 foreach(Face face in tetfaces){
+                    faces.Add(face);
+                }
 
-                    bool present = false;
+                // Remove any that are duplicated
 
-                    foreach (Face newface in faces){
-                        if (newface.equals(face)){
-                            present=true;
-                        }
+
+
+
+                // foreach(Face face in tetfaces){
+
+                //     bool present = false;
+                //     foreach (Face newface in faces){
+                //         if (newface.equals(face)){
+                //             present=true;
+                //         }
+                //     }
+                //     if (!present){
+                //         faces.Add(face);
+                //     }
+                // }
+            }
+
+
+            // Check how many instances of a face there are and remove all if there is more than 1
+            List<Face> newfaces = new List<Face>();
+            foreach(Face face in faces){
+
+                int num = 0;
+                foreach (Face newface in faces){
+                    if (newface.equals(face)){
+                        num++;
                     }
-
-                    if (!present){
-                        faces.Add(face);
-                    }
-                    // if (!faces.Contains (face)){
-                    //     faces.Add(face);
-                    //     // Debug.Log("Adding a face");
-                    // }
+                }
+                if (num == 1){
+                    newfaces.Add(face);
                 }
             }
-            Debug.Log(String.Format("Number of faces: {0}", faces.Count));
 
 
-            foreach(Face face in faces){
+
+
+
+
+
+
+
+
+
+
+            Debug.Log(String.Format("Number of faces: {0}", newfaces.Count));
+
+
+            foreach(Face face in newfaces){
 
                 // Create a new tetrahedron using this face and the test point
                 var newtet = new Tetrahedron(p, face.vertices[0], face.vertices[1], face.vertices[2]);
