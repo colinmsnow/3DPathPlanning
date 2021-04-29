@@ -290,13 +290,13 @@ public class NavMeshCreator : MonoBehaviour{
                     RaycastHit hit;
                     if (Physics.Raycast(vertices[i], vertices[j] - vertices[i], out hit, Vector3.Distance(vertices[i], vertices[j])))
                         {
-                            Debug.DrawLine(vertices[i], vertices[j], Color.red, 100000, false);
+                            // Debug.DrawLine(vertices[i], vertices[j], Color.red, 100000, false);
                             // Debug.Log("Did Hit");
                             connectedGrid[positionmap[vertices[i]], positionmap[vertices[j]]] = false;
                         }
                         else
                         {
-                            Debug.DrawRay(vertices[i], vertices[j] - vertices[i], Color.white, 100000, false);
+                            // Debug.DrawRay(vertices[i], vertices[j] - vertices[i], Color.white, 100000, false);
                             // connectedGrid[i, j] = true;
                             connectedGrid[positionmap[vertices[i]], positionmap[vertices[j]]] = true;
                             // Debug.Log("Did not Hit");
@@ -359,58 +359,58 @@ public class NavMeshCreator : MonoBehaviour{
     //     Debug.Log(String.Format("Num edges: {0}", numedges));
 
 
-    //     PointGraph graph = new PointGraph();
+        PointGraph graph = new PointGraph();
 
-    //     graph.initialize(points, connectedGrid);
+        graph.initialize(points, connectedGrid);
 
-    //     graph.createGraph();
-
-
+        graph.createGraph();
 
 
 
 
-    //     Astar astar = new Astar(graph);
 
-    //         float[] floatorigin = new float[] {0, 0, 0};
-    //         float[] floattarget = new float[] {1, 1, 1};
 
-    //         startTime = Environment.TickCount;
-    //         var answer = astar.search(floatorigin, floattarget);
-    //         endTime = Environment.TickCount;
-    //         Debug.Log(string.Format("Time to search: {0}", endTime-startTime));
+        Astar astar = new Astar(graph);
 
-    //         List<Vector3> vectorPath;
+            float[] floatorigin = new float[] {0, 0, 0};
+            float[] floattarget = new float[] {1, 1, 1};
 
-    //         if (answer == null){
-    //             Debug.Log("ASTAR: No valid path");
-    //             vectorPath = null;
-    //         }
-    //         else{
-    //             startTime = Environment.TickCount;
-    //             vectorPath = astar.PathToVectors();
-    //             endTime = Environment.TickCount;
-    //             Debug.Log(string.Format("Time to convert to vector: {0}", endTime-startTime));
+            startTime = Environment.TickCount;
+            var answer = astar.search(floatorigin, floattarget);
+            endTime = Environment.TickCount;
+            Debug.Log(string.Format("Time to search: {0}", endTime-startTime));
+
+            List<Vector3> vectorPath;
+
+            if (answer == null){
+                Debug.Log("ASTAR: No valid path");
+                vectorPath = null;
+            }
+            else{
+                startTime = Environment.TickCount;
+                vectorPath = astar.PathToVectors();
+                endTime = Environment.TickCount;
+                Debug.Log(string.Format("Time to convert to vector: {0}", endTime-startTime));
                 
-    //         }
+            }
 
-    //         foreach(Vector3 vec in vectorPath){
-    //             // Debug.Log(vec.ToString());
-    //             GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-    //             cube.transform.localScale = new Vector3(1f, 1f, 1f);
-    //             cube.transform.position = vec;
-    //             cube.GetComponent<Renderer>().material.color = Color.green;
-    //         }
+            foreach(Vector3 vec in vectorPath){
+                // Debug.Log(vec.ToString());
+                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                cube.transform.localScale = new Vector3(1f, 1f, 1f);
+                cube.transform.position = vec;
+                cube.GetComponent<Renderer>().material.color = Color.green;
+            }
 
  
 
-    //             for (int i=1; i<vectorPath.Count; i++){
-    //                 Debug.DrawRay(vectorPath[i], vectorPath[i-1] - vectorPath[i], Color.green, 1000, false);
-    //                 //Vector3.Distance(vectorPath[i], vectorPath[i-1])
-    //             }
+                for (int i=1; i<vectorPath.Count; i++){
+                    Debug.DrawRay(vectorPath[i], vectorPath[i-1] - vectorPath[i], Color.green, 1000, false);
+                    //Vector3.Distance(vectorPath[i], vectorPath[i-1])
+                }
             
 
-    //         Debug.Log(string.Format("StraightLineRatio: {0}", astar.StraightLineRatio()));
+            Debug.Log(string.Format("StraightLineRatio: {0}", astar.StraightLineRatio()));
 
 
 
