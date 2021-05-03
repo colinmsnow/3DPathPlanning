@@ -2,31 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-// using MapGrid;
+
+
+// Create grid of boxes given parameters and turn it into a graph
 
 
 // 500^3 boxes takes 68961 ms = 1.1 min
 
-
-/* This script works but should be rewritten to take an object-based
-    search instead of a brute force. Each object should find its
-    local cube mesh and determine which boxes that surround it are
-    invalid, then update only these to be non accessible. This makes
-    the algorithm dependent on the number and size of objects but not
-    the size of the search space.
-
-    Need to do:
-
-    1. Determine where grid points lay around an object
-        (should be simple modulus operation)
-
-    2. Get bounding box info about an object
-
-    3. Find grid cells which are invalid based on the parameters
-
-    4. Save all that into a global accessible mesh
-
-*/
 
 public class ObjectDetectionGrid : MonoBehaviour
 {
@@ -60,13 +42,6 @@ public class ObjectDetectionGrid : MonoBehaviour
         for (int x=0; x<numBoxes; x++){
             for (int y=0; y<numBoxes; y++){
                 for (int z=0; z<numBoxes; z++){
-                    // GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    // cube.transform.position = new Vector3(x*boxSize, y*boxSize, z*boxSize);
-                    // // cube.GetComponent<Renderer>().material.color = UnityEngine.Random.ColorHSV();
-                    // cube.GetComponent<Renderer>().material.color = Color.black;
-
-                    // collisionMask[x, y, z] = false;
-
                     Collider[] hitColliders = Physics.OverlapBox(new Vector3(x*boxSize + startPosition[0], y*boxSize+ startPosition[1], z*boxSize+ startPosition[2]), new Vector3(objectRadius, objectRadius, objectRadius), Quaternion.identity, m_LayerMask);
 
                     if (hitColliders.Length > 0){
@@ -82,10 +57,6 @@ public class ObjectDetectionGrid : MonoBehaviour
                     }
 
                     sample++;
-
-                    // if (sample%percent == 0){
-                    //     Debug.Log((float)sample / (float)numSamples * 100);
-                    // }
                 }
             }
         }

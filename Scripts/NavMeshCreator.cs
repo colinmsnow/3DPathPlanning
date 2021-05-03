@@ -5,7 +5,7 @@ using System;
 
 /*
 
-Creates a graph from bounding boxes of objects (if it works)
+Creates a graph from bounding boxes of objects with Delaunay Triangulaton
 
 */
 
@@ -26,16 +26,10 @@ public class NavMeshCreator : MonoBehaviour{
         var objects = GameObject.FindGameObjectsWithTag("Obstacle");
         var objectCount = objects.Length;
         foreach (var obj in objects) {
+            // Create bounding points for each obstacle
+
             Vector3 center = obj.GetComponent<Collider>().bounds.center;
             Vector3 size = obj.GetComponent<Collider>().bounds.size;
-            // Debug.Log(center);
-            // Debug.Log(size);
-
-            // Vector3 topleft = center + size/2;
-            // GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            // // cube.transform.localScale =size;
-            // cube.transform.position = topleft;
-            // cube.GetComponent<Renderer>().material.color = Color.red;
 
             Vector3 boundPoint1 = obj.GetComponent<Collider>().bounds.min;
             Vector3 boundPoint2 = obj.GetComponent<Collider>().bounds.max;
@@ -55,16 +49,12 @@ public class NavMeshCreator : MonoBehaviour{
 
                 points.Add(point);
 
-            
+                // Show point with a red box
                 GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 cube.transform.localScale = new Vector3(.1f, .1f, .1f);
                 cube.transform.position = point;
                 cube.GetComponent<Renderer>().material.color = Color.red;
-            
-
             }
-
-
         }
 
 
@@ -89,28 +79,7 @@ public class NavMeshCreator : MonoBehaviour{
 
         */
 
-
-        // Vector3 point1 = new Vector3(0,2.2f,0);
-        // Vector3 point2 = new Vector3(1,1,1);
-        // Vector3 point3 = new Vector3(1,-3,4);
-        // Vector3 point4 = new Vector3(-2,2,1);
-        // Vector3 pointnew = new Vector3(-2,3,1);
-        // Vector3 pointnew2 = new Vector3(-.319f,1.94f,2.1f);
-
-        // List<Vector3> tetpoints = new List<Vector3>();
-        // tetpoints.Add(point1);
-        // tetpoints.Add(point2);
-        // tetpoints.Add(point3);
-        // tetpoints.Add(point4);
-        // tetpoints.Add(pointnew);
-        // tetpoints.Add(pointnew2);
-
-
-        // Vector3 point5 = new Vector3(6.25f,-5,-5);
-        // Vector3 point6 = new Vector3(5,5,5);
-        // Vector3 point7 = new Vector3(-5,5,0);
-        // Vector3 point8 = new Vector3(0,-5,5);
-
+        // Bounding tetrahedron points
         Vector3 point5 = new Vector3(11,620,15);
         Vector3 point6 = new Vector3(-512,-115,340);
         Vector3 point7 = new Vector3(4,-115,-495);
@@ -124,8 +93,6 @@ public class NavMeshCreator : MonoBehaviour{
 
 
         // Create initial tetrahedron
-
-
         var initialtet = new Tetrahedron(point5, point6, point7, point8);
 
         // initialtet.display();
@@ -208,8 +175,6 @@ public class NavMeshCreator : MonoBehaviour{
 
             Debug.Log("Ending first tetrahedron");
 
-            // if(c == 300){break;}
-
             c++;
         }
 
@@ -249,14 +214,7 @@ public class NavMeshCreator : MonoBehaviour{
         }
 
 
-
-
-
-
-
-
-
-        // Need to create a point graph that describes whether each point is connected to another point
+        // Create a point graph that describes whether each point is connected to another point
 
         bool[,] connectedGrid = new bool[points.Count, points.Count];
 
@@ -274,40 +232,28 @@ public class NavMeshCreator : MonoBehaviour{
 
             List<Vector3> vertices = tet.vertices;
 
-
-
             // For each pair of points see if the line hits an obstacle
             for (int i=0; i<vertices.Count; i++){
                 for (int j=0; j<vertices.Count; j++){
                     attempts++;
                     if (i==j){continue;}
 
-
-                    
-
-
-
                     RaycastHit hit;
                     if (Physics.Raycast(vertices[i], vertices[j] - vertices[i], out hit, Vector3.Distance(vertices[i], vertices[j])))
-                        {
-                            // Debug.DrawLine(vertices[i], vertices[j], Color.red, 100000, false);
-                            // Debug.Log("Did Hit");
-                            connectedGrid[positionmap[vertices[i]], positionmap[vertices[j]]] = false;
-                        }
-                        else
-                        {
-                            // Debug.DrawRay(vertices[i], vertices[j] - vertices[i], Color.white, 100000, false);
-                            // connectedGrid[i, j] = true;
-                            connectedGrid[positionmap[vertices[i]], positionmap[vertices[j]]] = true;
-                            // Debug.Log("Did not Hit");
-                        }
-
-
+                    {
+                        // Debug.DrawLine(vertices[i], vertices[j], Color.red, 100000, false);
+                        // Debug.Log("Did Hit");
+                        connectedGrid[positionmap[vertices[i]], positionmap[vertices[j]]] = false;
+                    }
+                    else
+                    {
+                        // Debug.DrawRay(vertices[i], vertices[j] - vertices[i], Color.white, 100000, false);
+                        // connectedGrid[i, j] = true;
+                        connectedGrid[positionmap[vertices[i]], positionmap[vertices[j]]] = true;
+                        // Debug.Log("Did not Hit");
+                    }
                 }
             }
-
-
-
         }
         
         for(int i=0; i<points.Count; i++){
@@ -320,55 +266,11 @@ public class NavMeshCreator : MonoBehaviour{
         Debug.Log(String.Format("Number of edges: {0}", numedges/2));
         Debug.Log(String.Format("Attempts: {0}", attempts));
 
-
-        // // Iterate through each point and try to connect to each other point
-
-        // bool[,] connectedGrid = new bool[points.Count, points.Count];
-
-        
-
-        // int numedges = 0;
-        // for(int i=0; i<points.Count; i++){
-        //     Vector3 point = points[i];
-        //     for(int j=0; j<points.Count; j++){
-        //         if (i==j){continue;}
-        //         RaycastHit hit;
-        //         if (Physics.Raycast(points[i], points[j] - points[i], out hit, Vector3.Distance(points[i], points[j])))
-        //             {
-        //                 // Debug.DrawRay(points[i], points[j] - points[i] * hit.distance, Color.yellow, 100, false);
-        //                 // Debug.Log("Did Hit");
-        //                 connectedGrid[i, j] = false;
-        //             }
-        //             else
-        //             {
-        //                 // Debug.DrawRay(points[i], points[j] - points[i], Color.white, 100, false);
-        //                 connectedGrid[i, j] = true;
-        //                 // Debug.Log("Did not Hit");
-        //                 numedges++;
-        //             }
-        //     }
-        // }
-
-
-
-
-
-
-    //     int endTime = Environment.TickCount;
-    //     Debug.Log(string.Format("Time to load: {0}", endTime-startTime));
-    //     Debug.Log(String.Format("Num edges: {0}", numedges));
-
-
         PointGraph graph = new PointGraph();
 
         graph.initialize(points, connectedGrid);
 
         graph.createGraph();
-
-
-
-
-
 
         Astar astar = new Astar(graph);
 
@@ -412,14 +314,9 @@ public class NavMeshCreator : MonoBehaviour{
 
             Debug.Log(string.Format("StraightLineRatio: {0}", astar.StraightLineRatio()));
 
-
-
-
-
-
     }
 
-    public bool pathClear(Vector3 point1, Vector3 point2){
+public bool pathClear(Vector3 point1, Vector3 point2){
 
         RaycastHit hit;
         return (Physics.Raycast(point1, point2 - point1, out hit, Vector3.Distance(point1, point2)));

@@ -79,14 +79,8 @@ public class Astar
         originCell.heuristic = grid.Distance(originCell, targetCell);
         queue.Enqueue(originCell.f, originCell);
 
-        // Debug.Log("Got here");
-
-        // Debug.Log(string.Format("Queue is: {0}", queue.isEmpty()));
-
         while(!queue.isEmpty()){
 
-            // Debug.Log("looped");
-            
             
             Cell current = queue.Dequeue();
             if (current == targetCell){
@@ -95,7 +89,6 @@ public class Astar
 
             var neighbours = grid.GetNeighbours(current);
 
-            // Debug.Log(neighbours.Length);
 
 
             for (int i = 0; i < neighbours.Length; i++){
@@ -110,9 +103,6 @@ public class Astar
                 checkedneighbour.transform.position = CellToVector(neighbour);
                 checkedneighbour.GetComponent<Renderer>().material.color = Color.yellow;
 
-                // Debug.Log(neighbour);
-                // Debug.Log(neighbour.empty);
-
                 if(neighbour == null){
                     continue;
                 }
@@ -122,20 +112,9 @@ public class Astar
                     continue;
                 }
 
-
-                // Debug.Log("Current cost is: " + current.cost.ToString());
-                // Debug.Log("Grid distance is: " + grid.Distance(current, neighbour).ToString());
-
-
-
                 float tentativeScore = current.cost + grid.Distance(current, neighbour);
 
-
-                // Debug.Log("Checking tentative score");
-
                 if (tentativeScore < neighbour.cost){
-
-                    // Debug.Log("tentative score is less");
 
                     neighbour.parent = current;
                     neighbour.cost = tentativeScore;
@@ -161,11 +140,6 @@ public class Astar
             {
 
                 var neighbours = current.neighbours;
-
-                // foreach (Cell neighbour in neighbours){
-                //     Debug.DrawRay(floattovec3(current.floatPosition), floattovec3(neighbour.floatPosition) - floattovec3(current.floatPosition), Color.red, 1000, false);
-                // }
-                // Debug.DrawRay(floattovec3(current.floatPosition), floattovec3(parent.floatPosition) - floattovec3(current.floatPosition), Color.red, 1000, false);
                 current = current.parent;
                 path.Add(current);
 

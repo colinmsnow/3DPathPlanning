@@ -28,15 +28,6 @@ public class BoundingBoxGraphCreator : MonoBehaviour{
         foreach (var obj in objects) {
             Vector3 center = obj.GetComponent<Collider>().bounds.center;
             Vector3 size = obj.GetComponent<Collider>().bounds.size;
-            // Debug.Log(center);
-            // Debug.Log(size);
-
-            // Vector3 topleft = center + size/2;
-            // GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            // // cube.transform.localScale =size;
-            // cube.transform.position = topleft;
-            // cube.GetComponent<Renderer>().material.color = Color.red;
-
             Vector3 boundPoint1 = obj.GetComponent<Collider>().bounds.min;
             Vector3 boundPoint2 = obj.GetComponent<Collider>().bounds.max;
 
@@ -87,7 +78,7 @@ public class BoundingBoxGraphCreator : MonoBehaviour{
                     }
                     else
                     {
-                        // Debug.DrawRay(points[i], points[j] - points[i], Color.white, 100, false);
+                        // Debug.DrawRay(points[i], points[j] - points[i], Color.cyan, 100, false);
                         connectedGrid[i, j] = true;
                         // Debug.Log("Did not Hit");
                         numedges++;

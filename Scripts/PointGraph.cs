@@ -96,28 +96,16 @@ public class PointGraph: Graph{
     public override List<Vector3> PathToVectors(List<Cell> generatedPath){
 
         List<Vector3> vectorPath = new List<Vector3>();
-        // Vector3 startpos = new Vector3(startPosition[0], startPosition[1], startPosition[2]);
 
         foreach(Cell cell in generatedPath){
             vectorPath.Add(floattovec3(cell.floatPosition));
         }
 
-
-        // foreach(Cell cell in generatedPath){
-        //     Vector3 boxpos = new Vector3(cell.position[0], cell.position[1], cell.position[2]);
-        //     boxpos *=boxSize;
-        //     boxpos = boxpos + startpos;
-        //     vectorPath.Add(boxpos);
-        // }
         return vectorPath;
     }
 
     public override Vector3 CellToVector(Cell cell){
-    
-        // Vector3 startpos = new Vector3(startPosition[0], startPosition[1], startPosition[2]);
-        // Vector3 boxpos = new Vector3(cell.position[0], cell.position[1], cell.position[2]);
-        // boxpos *=boxSize;
-        // boxpos = boxpos + startpos;
+
         return floattovec3(cell.floatPosition);
     }
 
@@ -130,35 +118,4 @@ public class PointGraph: Graph{
         return new Vector3 (input[0], input[1], input[2]);
         
     }
-
-    // [StructLayout(LayoutKind.Explicit)]
-    // struct intfloatunion {
-    //     [FieldOffset(0)]
-    //     public float f;
-    //     [FieldOffset(0)]
-    //     public int i;
-    // }
- 
-    // private float FastInvSqrt(float num){
-    //         intfloatunion ifu = new intfloatunion();
-    //         ifu.f = num;
-    //         ifu.i = 1597463174 - (ifu.i >> 1);
-    //         return ifu.f * (1.5f - (0.5f * ifu.f * ifu.f * ifu.f));
-    //     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
