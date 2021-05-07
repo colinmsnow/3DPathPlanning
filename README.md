@@ -14,6 +14,6 @@ Usage:
     - Object DetectionGrid and Path Planner for grid-based
     - Bounding Box Graph Creator for visibility graph
     - Nav Mesh Creator for navigation mesh
-4. Run the scene with debug rays on to see generated path.
+4. Run the scene with debug rays on to see generated path. If you are using the grid-based approach you will first see the generated obstacles and then need to press space to see the path.
 
 Special thanks to June Rhodes for a circumsphere calculator and Nikhil Joshi for a priority queue implementation.
